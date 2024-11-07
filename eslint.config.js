@@ -23,6 +23,14 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      indent: [ "error", 4 ],
+      "linebreak-style": [ "error","unix" ],
+      quotes: [ "error", "single" ],
+      semi: [ "error",  "always" ],
+      "@typescript-eslint/consistent-type-imports": ["error", { "fixStyle": "inline-type-imports"}],
+      "object-curly-spacing": ["error", "always", { "arraysInObjects": true }],
+      "array-bracket-spacing": ["error", "always"],
+      "@typescript-eslint/explicit-function-return-type": "warn"
     },
   },
 )
