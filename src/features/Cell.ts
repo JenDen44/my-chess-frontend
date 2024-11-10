@@ -6,13 +6,17 @@ export class Cell {
     readonly x: number;
     readonly y: number;
     readonly color: Color;
-    figure: Nullable<Figure>;
+    figure: Nullable<Figure> = null;
+    isAvailable = false;
 
-    constructor(x: number, y: number, color: Color, figure: Nullable<Figure> = null) {
+    constructor(x: number, y: number, color: Color) {
         this.id = Math.random();
         this.x = x;
         this.y = y;
         this.color = color;
-        this.figure = figure;
     }
+
+    compare = (cell: Nullable<Cell>): boolean => {
+        return this.x === cell?.x && this.y === cell.y;
+    };
 }

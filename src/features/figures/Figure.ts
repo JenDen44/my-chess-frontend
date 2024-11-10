@@ -51,4 +51,16 @@ export class Figure {
         this.cell = cell;
         this.cell.figure = this;
     }
+
+    canMove = (cell: Cell): boolean => {
+        return !cell.figure || cell.figure.color !== this.color;
+    };
+
+    move = (cell: Cell): void => {
+        if (this.canMove(cell)) {
+            this.cell.figure = null;
+            this.cell = cell;
+            this.cell.figure = this;
+        }
+    };
 }

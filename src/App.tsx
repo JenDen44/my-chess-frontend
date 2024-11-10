@@ -1,11 +1,22 @@
-import { useState, type FC } from 'react';
+import { useEffect, useState, type FC } from 'react';
 import { Board as BoardComponent } from './components';
-import { Board, ShortFigureName } from './features';
+import { Board } from './features';
 
 export const App: FC = () => {
-    const [ board ] = useState(new Board([ [ ShortFigureName.whiteBishop ] ]));
+    const [ board, setBoard ] = useState(new Board());
+    const onUpdate = (): void => {
+        setBoard((prevBoard) => prevBoard.copy());
+    };
+
+    useEffect(() => {
+        const newBoard = new Board();
+        newBoard.init();
+        newBoard.addFigures();
+
+        setBoard(newBoard);
+    }, []);
 
     return (
-        <BoardComponent board={board} />
+        <BoardComponent board={board} onUpdate={onUpdate} />
     );
 };
