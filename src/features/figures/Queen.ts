@@ -11,4 +11,13 @@ export class Queen extends Figure {
 
         super(FigureName.queen, color, Icon, cell);
     }
+
+    canMove(cell: Cell): boolean {
+        if (!super.canMove(cell)) {
+            return false;
+        }
+
+
+        return this.cell.checkHorizontal(cell) || this.cell.checkVertical(cell) || this.cell.checkDiagonal(cell);
+    };
 }

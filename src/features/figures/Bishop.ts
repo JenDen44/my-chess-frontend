@@ -11,4 +11,13 @@ export class Bishop extends Figure {
 
         super(FigureName.bishop, color, Icon, cell);
     }
+
+    canMove(cell: Cell): boolean {
+        if (!super.canMove(cell)) {
+            return false;
+        }
+
+
+        return this.cell.checkDiagonal(cell);
+    };
 }

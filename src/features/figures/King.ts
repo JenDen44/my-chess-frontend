@@ -11,4 +11,15 @@ export class King extends Figure {
 
         super(FigureName.king, color, Icon, cell);
     }
+
+    canMove(cell: Cell): boolean {
+        if (!super.canMove(cell)) {
+            return false;
+        }
+
+        const dx = Math.abs(this.cell.x - cell.x);
+        const dy = Math.abs(this.cell.y - cell.y);
+
+        return dx <= 1 && dy <= 1;
+    };
 }
