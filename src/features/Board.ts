@@ -12,13 +12,13 @@ export class Board {
         this.figureFactory = new FigureFactory();
     }
 
-    private getCell = (x: number, y: number): Cell => {
+    getCell(x: number, y: number): Cell {
         if (!this.cells[y]?.[x]) throw new Error(`Не доступные координаты x = ${x}, y = ${y}`);
 
         return this.cells[y][x];
     };
 
-    init = (): void => {
+    init(): void {
         const cells: Cell[][] = [];
 
         for (let y = 0; y < 8; y++) {
@@ -26,7 +26,7 @@ export class Board {
 
             for (let x = 0; x < 8; x++) {
                 const color = (x + y) % 2 ? Color.black : Color.white;
-                const cell = new Cell(x, y, color);
+                const cell = new Cell(x, y, color, this);
                 row.push(cell);
             }
 
@@ -36,7 +36,7 @@ export class Board {
         this.cells = cells;
     };
 
-    addFigures = (shortNames: Nullable<ShortFigureName>[][] = defaultShortNames): void => {
+    addFigures(shortNames: Nullable<ShortFigureName>[][] = defaultShortNames): void {
         for (let y = 0; y < shortNames.length; y++) {
             for (let x = 0; x < shortNames[y].length; x++) {
                 const shortName = shortNames[y][x];
@@ -46,7 +46,7 @@ export class Board {
         }
     };
 
-    highlightCells = (selectedCell: Nullable<Cell>): void => {
+    highlightCells(selectedCell: Nullable<Cell>): void {
         for (let y = 0; y < this.cells.length; y++) {
             for (let x = 0; x < this.cells[y].length; x++) {
                 const cell = this.getCell(x, y);
@@ -55,9 +55,16 @@ export class Board {
         }
     };
 
-    copy = (): Board => {
+    copy(): Board {
         const board = new Board();
         board.cells = this.cells;
+
+        for (let y = 0; y < board.cells.length; y++) {
+            for (let x = 0; x < this.cells[y].length; x++) {
+                const cell = board.getCell(x, y);
+                cell.board = board;
+            }
+        }
 
         return board;
     };

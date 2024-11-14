@@ -11,4 +11,13 @@ export class Rook extends Figure {
 
         super(FigureName.rook, color, Icon, cell);
     }
+
+    canMove(cell: Cell): boolean {
+        if (!super.canMove(cell)) {
+            return false;
+        }
+
+
+        return this.cell.checkHorizontal(cell) || this.cell.checkVertical(cell);
+    };
 }
