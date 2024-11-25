@@ -68,4 +68,20 @@ export class Cell {
 
         return true;
     }
+
+    checkEnemy(figure: Figure): boolean {
+        if (this.figure) {
+            return this.figure.color !== figure.color;
+        }
+
+        return false;
+    }
+
+    setBoard(board: Board): void {
+        this.board = board;
+
+        if (this.figure) {
+            this.figure.board = board;
+        }
+    }
 }

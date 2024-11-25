@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { type Board } from '../Board';
 import { type Cell } from '../Cell';
 import { Color } from '../Color';
 import { FigureName } from './FigureName';
@@ -9,6 +10,7 @@ export class Figure {
     readonly color: Color;
     readonly Icon: FC;
     cell: Cell;
+    board: Board;
 
     get shortName(): ShortFigureName {
         if (this.color === Color.white) {
@@ -50,6 +52,7 @@ export class Figure {
         this.Icon = Icon;
         this.cell = cell;
         this.cell.figure = this;
+        this.board = this.cell.board;
     }
 
     canMove(cell: Cell): boolean {
@@ -57,10 +60,9 @@ export class Figure {
     };
 
     move(cell: Cell): void {
-        if (this.canMove(cell)) {
-            this.cell.figure = null;
-            this.cell = cell;
-            this.cell.figure = this;
-        }
+        this.cell.figure = null;
+        this.cell = cell;
+        this.cell.figure = this;
+        this.board.passantCell = null;
     };
 }
