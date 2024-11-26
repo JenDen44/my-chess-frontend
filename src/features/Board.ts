@@ -8,6 +8,8 @@ export class Board {
 
     cells: Cell[][] = [];
 
+    passantCell: Nullable<Cell> = null;
+
     constructor() {
         this.figureFactory = new FigureFactory();
     }
@@ -58,11 +60,13 @@ export class Board {
     copy(): Board {
         const board = new Board();
         board.cells = this.cells;
+        board.passantCell = this.passantCell;
 
         for (let y = 0; y < board.cells.length; y++) {
             for (let x = 0; x < this.cells[y].length; x++) {
                 const cell = board.getCell(x, y);
-                cell.board = board;
+
+                cell.setBoard(board);
             }
         }
 

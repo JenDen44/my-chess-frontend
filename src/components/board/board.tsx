@@ -13,8 +13,10 @@ export const Board: FC<BoardProps> = (props) => {
                 return cell.figure ? cell : null;
             }
 
-            prevSelectedCell.figure?.move(cell);
-            onUpdate();
+            if (prevSelectedCell.figure?.canMove(cell)) {
+                prevSelectedCell.figure.move(cell);
+                onUpdate();
+            }
 
             return null;
         });
