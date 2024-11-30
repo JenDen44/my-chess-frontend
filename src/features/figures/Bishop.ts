@@ -12,8 +12,8 @@ export class Bishop extends Figure {
         super(FigureName.bishop, color, Icon, cell);
     }
 
-    canMove(cell: Cell): boolean {
-        if (!super.canMove(cell)) {
+    checkCorrectMove(cell: Cell): boolean {
+        if (!super.checkCorrectMove(cell)) {
             return false;
         }
 

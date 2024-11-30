@@ -77,6 +77,15 @@ export class Cell {
         return false;
     }
 
+    setFigure(figure: Nullable<Figure>): void {
+        this.figure = figure;
+
+        if (this.figure) {
+            this.figure.cell = this;
+            this.figure.board = this.board;
+        }
+    }
+
     setBoard(board: Board): void {
         this.board = board;
 
