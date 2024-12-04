@@ -12,8 +12,8 @@ export class Knight extends Figure {
         super(FigureName.knight, color, Icon, cell);
     }
 
-    canMove(cell: Cell): boolean {
-        if (!super.canMove(cell)) {
+    checkCorrectMove(cell: Cell): boolean {
+        if (!super.checkCorrectMove(cell)) {
             return false;
         }
 

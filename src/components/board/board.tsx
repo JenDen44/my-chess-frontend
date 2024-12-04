@@ -5,16 +5,17 @@ import { type BoardProps } from './types';
 import { Row } from './styles';
 
 export const Board: FC<BoardProps> = (props) => {
-    const { board, onUpdate } = props;
+    const { board, onUpdate, activeColor, onSwitchActiveColor } = props;
     const [ selectedCell, setSelectedCell ] = useState<Nullable<Cell>>(null);
     const onClick = (cell: Cell): void => {
         setSelectedCell((prevSelectedCell) => {
             if (!prevSelectedCell) {
-                return cell.figure ? cell : null;
+                return cell.figure?.color === activeColor ? cell : null;
             }
 
             if (prevSelectedCell.figure?.canMove(cell)) {
                 prevSelectedCell.figure.move(cell);
+                onSwitchActiveColor();
                 onUpdate();
             }
 

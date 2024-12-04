@@ -12,8 +12,8 @@ export class Rook extends Figure {
         super(FigureName.rook, color, Icon, cell);
     }
 
-    canMove(cell: Cell): boolean {
-        if (!super.canMove(cell)) {
+    checkCorrectMove(cell: Cell): boolean {
+        if (!super.checkCorrectMove(cell)) {
             return false;
         }
 

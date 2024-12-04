@@ -7,7 +7,11 @@ import { FigureName } from './FigureName';
 import { Queen } from './Queen';
 
 export class Pawn extends Figure {
-    isFirstStep = true;
+    get isFirstStep(): boolean {
+        const startY = this.color === Color.white ? 6 : 1;
+
+        return this.cell.y === startY;
+    }
 
     constructor(color: Color, cell: Cell) {
         const Icon = color === Color.white ? WhitePawn : BlackPawn;
@@ -15,8 +19,8 @@ export class Pawn extends Figure {
         super(FigureName.pawn, color, Icon, cell);
     }
 
-    canMove(cell: Cell): boolean {
-        if (!super.canMove(cell)) {
+    checkCorrectMove(cell: Cell): boolean {
+        if (!super.checkCorrectMove(cell)) {
             return false;
         }
 
@@ -53,7 +57,6 @@ export class Pawn extends Figure {
 
     move(cell: Cell): void {
         if (this.isFirstStep) {
-            this.isFirstStep = false;
             const dx = cell.x - this.cell.x;
             const dy = cell.y - this.cell.y;
             const currentDY = this.color === Color.black ? 1 : -1;

@@ -12,8 +12,8 @@ export class Queen extends Figure {
         super(FigureName.queen, color, Icon, cell);
     }
 
-    canMove(cell: Cell): boolean {
-        if (!super.canMove(cell)) {
+    checkCorrectMove(cell: Cell): boolean {
+        if (!super.checkCorrectMove(cell)) {
             return false;
         }
 
