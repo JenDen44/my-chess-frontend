@@ -11,4 +11,18 @@ export default defineConfig({
             include: '**/*.svg',
         })
     ],
+    server:{
+        proxy: {
+            '/api': {
+                target: 'http://192.168.1.101:8089/chessGame/',
+                changeOrigin: true,
+                secure: false,
+                rewrite: (path) => path.replace(/^\/api/, ''),
+            },
+            '/ws': {
+                target: 'ws://192.168.1.101:8089/chessGame/',
+                ws: true
+            },
+        }
+    },
 });

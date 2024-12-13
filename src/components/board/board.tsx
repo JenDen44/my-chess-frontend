@@ -1,35 +1,10 @@
-import { useEffect, useState, type FC } from 'react';
-import { type Cell } from '../../features';
+import { type FC } from 'react';
 import { Cell as CellComponent } from '../Cell';
 import { type BoardProps } from './types';
 import { Row } from './styles';
 
 export const Board: FC<BoardProps> = (props) => {
-    const { board, onUpdate, activeColor, onSwitchActiveColor } = props;
-    const [ selectedCell, setSelectedCell ] = useState<Nullable<Cell>>(null);
-    const onClick = (cell: Cell): void => {
-        setSelectedCell((prevSelectedCell) => {
-            if (!prevSelectedCell) {
-                return cell.figure?.color === activeColor ? cell : null;
-            }
-
-            if (prevSelectedCell.figure?.canMove(cell)) {
-                prevSelectedCell.figure.move(cell);
-                onSwitchActiveColor();
-                onUpdate();
-            }
-
-            return null;
-        });
-    };
-    const onHighlightCells = (cell: Nullable<Cell>): void => {
-        board.highlightCells(cell);
-        onUpdate();
-    };
-
-    useEffect(() => {
-        onHighlightCells(selectedCell);
-    }, [ selectedCell ]);
+    const { board, selectedCell, onClick } = props;
 
     return (
         <div>
