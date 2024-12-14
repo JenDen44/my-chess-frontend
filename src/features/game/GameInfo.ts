@@ -1,4 +1,4 @@
-export type GameInfoStatus = 'in_progress' | 'finished';
+export type GameInfoStatus = 'in_process' | 'finished';
 
 export type GameInfoDetail = 'white' | 'black' | 'draw';
 

@@ -6,7 +6,7 @@ import { Actions, Container, Content } from './styles';
 
 export const GamePage: FC = () => {
     const { token } = useParams();
-    const { board, selectedCell, info, currentColor, onInvite, onClick } = useGame(token);
+    const { board, selectedCell, info, currentColor, onInvite, onClick, onGiveUp } = useGame(token);
 
     return (
         <Container>
@@ -18,7 +18,7 @@ export const GamePage: FC = () => {
                     onClick={ onClick }
                 />
                 <Actions>
-                    <Button>Сдаться</Button>
+                    <Button onClick={onGiveUp}>Сдаться</Button>
                     <Button onClick={onInvite}>Пригласить друга</Button>
                 </Actions>
             </Content>

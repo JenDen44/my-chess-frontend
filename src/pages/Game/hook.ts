@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Board, type GameInfo, Color, type Cell } from '../../features';
-import { getGame, move } from '../../api';
+import { getGame, giveUp, move } from '../../api';
 import { useNavigate } from 'react-router-dom';
 import { type UseGame } from './types';
 import { useWebsocket } from '../../hooks';
@@ -8,20 +8,29 @@ import { type WebSocketData } from '../../hooks/websocket/types';
 
 export const useGame = (token?: string): UseGame => {
     const [ board, setBoard ] = useState<Board>(new Board());
-    const [ info, setInfo ] = useState<GameInfo>({ status: 'in_progress' });
+    const [ info, setInfo ] = useState<GameInfo>({ status: 'in_process' });
     const [ otherToken, setOtherToken ] = useState('');
     const [ currentColor, setCurrentColor ] = useState<Color>(Color.white);
+    const selectedCellRef = useRef<Nullable<Cell>>(null);
+
     const navigate = useNavigate();
+    const { onSubscribe, onUnsubscribe } = useWebsocket(token);
+
+    const onGiveUp = useCallback(() => {
+        if (!token || info.status === 'finished') return;
+
+        giveUp(token).then(setInfo);
+    }, [ info, token ]);
     const onInvite = useCallback(() => {
         navigator.clipboard.writeText(`${window.location.origin}/${otherToken}`);
     }, [ otherToken ]);
-    const selectedCellRef = useRef<Nullable<Cell>>(null);
+
     const onClick = useCallback((cell: Cell) => {
         if (!token || info.status === 'finished' || info.detail !== currentColor) return;
 
         if (!selectedCellRef.current) {
             selectedCellRef.current = cell.figure?.color === currentColor ? cell : null;
-            board.highlightCells(cell);
+            board.highlightCells(selectedCellRef.current);
             setBoard(board.copy());
 
             return;
@@ -31,11 +40,17 @@ export const useGame = (token?: string): UseGame => {
             move(
                 token,
                 { fromX: selectedCellRef.current.x, fromY: selectedCellRef.current.y, toX: cell.x, toY: cell.y }
-            ).then(() => {
+            ).then((newInfo) => {
                 selectedCellRef.current?.figure?.move(cell);
                 selectedCellRef.current = null;
                 board.highlightCells(selectedCellRef.current);
                 setBoard(board.copy());
+
+                if (newInfo.status === 'finished') {
+                    setInfo(newInfo);
+                } else {
+                    setInfo({ ...newInfo, detail: currentColor === Color.white ? Color.black : Color.white });
+                }
             });
 
             return;
@@ -45,7 +60,7 @@ export const useGame = (token?: string): UseGame => {
         board.highlightCells(selectedCellRef.current);
         setBoard(board.copy());
     }, [ token, info, currentColor, board ]);
-    const { onSubscribe, onUnsubscribe } = useWebsocket(token);
+
     const onMessage = useCallback((data: WebSocketData) => {
         if (data.type === 'STATUS_CHANGED') {
             setInfo(data.entity);
@@ -63,7 +78,6 @@ export const useGame = (token?: string): UseGame => {
         return (): void => onUnsubscribe(onMessage);
     }, [ onSubscribe, onUnsubscribe, onMessage ]);
 
-
     useEffect(() => {
         if (token) {
             getGame(token).then((game) => {
@@ -77,7 +91,7 @@ export const useGame = (token?: string): UseGame => {
                 if (info.status === 'finished') {
                     setInfo(info);
                 } else {
-                    setInfo({ status: 'in_progress', detail: active });
+                    setInfo({ status: 'in_process', detail: active });
                 }
 
                 setCurrentColor(currentColor);
@@ -88,6 +102,7 @@ export const useGame = (token?: string): UseGame => {
         }
     }, [ navigate, token ]);
 
+    console.log(JSON.stringify(info));
 
-    return { board, selectedCell: selectedCellRef.current, info, currentColor, onInvite, onClick };
+    return { board, selectedCell: selectedCellRef.current, info, currentColor, onInvite, onClick, onGiveUp };
 };

@@ -6,5 +6,6 @@ export interface UseGame {
     currentColor: Color;
     info: GameInfo;
     onInvite: VoidFunction;
+    onGiveUp: VoidFunction;
     onClick: (cell: Cell) => void;
 }

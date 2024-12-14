@@ -1,7 +1,7 @@
 import { type Color, type GameInfoDetail, type GameInfoStatus } from '../../features';
 
 export const getInfo = (currentColor: Color, status: GameInfoStatus, detail?: GameInfoDetail): string => {
-    if (status === 'in_progress') {
+    if (status === 'in_process') {
         return detail === currentColor ? 'Ходите' : 'Ожидание хода соперника';
     }
 
