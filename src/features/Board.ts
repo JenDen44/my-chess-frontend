@@ -141,4 +141,11 @@ export class Board {
         fromCell.setFigure(formFigure);
         toCell.setFigure(toFigure);
     }
+
+    move({ fromX, fromY, toX, toY }:{fromX: number, fromY: number, toX: number, toY: number}): void {
+        const fromCell = this.getCell(fromX, fromY);
+        const toCell = this.getCell(toX, toY);
+
+        fromCell.figure?.move(toCell);
+    }
 }

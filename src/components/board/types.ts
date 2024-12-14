@@ -1,8 +1,7 @@
-import { type Color, type Board } from '../../features';
+import { type Board, type Cell } from '../../features';
 
 export interface BoardProps {
     board: Board;
-    activeColor: Color;
-    onUpdate: VoidFunction;
-    onSwitchActiveColor: VoidFunction;
+    selectedCell: Nullable<Cell>;
+    onClick: (cell: Cell) => void;
 }
