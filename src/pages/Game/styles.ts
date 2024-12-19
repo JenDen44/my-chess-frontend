@@ -13,10 +13,13 @@ export const Content = styled.div`
     gap: 24px;
 `;
 
+export const GameField = styled.div`
+    display: flex;
+    gap: 24px;
+`;
+
 export const Actions = styled.div`
     display: flex;
-    flex-grow: 1;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 16px;
 `;

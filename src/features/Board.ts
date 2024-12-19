@@ -1,6 +1,5 @@
 import { Cell } from './Cell';
 import { Color } from './Color';
-import { defaultShortNames } from './consts';
 import { type Figure, FigureFactory, FigureName, type ShortFigureName } from './figures';
 import { type PrevStep } from './PrevStep';
 
@@ -41,7 +40,7 @@ export class Board {
         this.cells = cells;
     };
 
-    addFigures(shortNames: Nullable<ShortFigureName>[][] = defaultShortNames): void {
+    addFigures(shortNames: Nullable<ShortFigureName>[][]): void {
         for (let y = 0; y < shortNames.length; y++) {
             for (let x = 0; x < shortNames[y].length; x++) {
                 const shortName = shortNames[y][x];

@@ -1,9 +1,9 @@
 import { type FC } from 'react';
-import { Content } from './styles';
-import { Button } from '../../components';
-import { start } from '../../api';
 import { useNavigate } from 'react-router';
+import Button from '@mui/material/Button';
+import { start } from '../../api';
 import { Color } from '../../features';
+import { Content } from './styles';
 
 export const NewGamePage: FC = () => {
     const navigate = useNavigate();
@@ -17,8 +17,8 @@ export const NewGamePage: FC = () => {
     };
     return (
         <Content>
-            <Button onClick={() => onStart(Color.white)}>Начать за белых</Button>
-            <Button onClick={() => onStart(Color.black)}>Начать за черных</Button>
+            <Button variant="contained" onClick={() => onStart(Color.white)}>Начать за белых</Button>
+            <Button variant="contained" onClick={() => onStart(Color.black)}>Начать за черных</Button>
         </Content>
     );
 };

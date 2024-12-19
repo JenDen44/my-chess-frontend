@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Board, type GameInfo, Color, type Cell } from '../../features';
 import { getGame, giveUp, move } from '../../api';
-import { useNavigate } from 'react-router-dom';
 import { type UseGame } from './types';
-import { useWebsocket } from '../../hooks';
-import { type WebSocketData } from '../../hooks/websocket/types';
+import { useWebsocket, type WebSocketData } from '../../hooks';
 
 export const useGame = (token?: string): UseGame => {
     const [ board, setBoard ] = useState<Board>(new Board());
@@ -12,9 +11,10 @@ export const useGame = (token?: string): UseGame => {
     const [ otherToken, setOtherToken ] = useState('');
     const [ currentColor, setCurrentColor ] = useState<Color>(Color.white);
     const selectedCellRef = useRef<Nullable<Cell>>(null);
-
     const navigate = useNavigate();
     const { onSubscribe, onUnsubscribe } = useWebsocket(token);
+    const [ isOpenDrawModal, setOpenDrawModal ] = useState(false);
+    const [ isOpenDrawAnswerModal, setOpenDrawAnswerModal ] = useState(false);
 
     const onGiveUp = useCallback(() => {
         if (!token || info.status === 'finished') return;
@@ -24,6 +24,17 @@ export const useGame = (token?: string): UseGame => {
     const onInvite = useCallback(() => {
         navigator.clipboard.writeText(`${window.location.origin}/${otherToken}`);
     }, [ otherToken ]);
+    const onOpenDrawModal = useCallback(() => {
+        if (!token || info.status === 'finished') return;
+
+        setOpenDrawModal(true);
+    }, [ info, token ]);
+    const onCloseDrawModal = useCallback(() => {
+        setOpenDrawModal(false);
+    }, []);
+    const onCloseDrawAnswerModal = useCallback(() => {
+        setOpenDrawAnswerModal(false);
+    }, []);
 
     const onClick = useCallback((cell: Cell) => {
         if (!token || info.status === 'finished' || info.detail !== currentColor) return;
@@ -62,14 +73,23 @@ export const useGame = (token?: string): UseGame => {
     }, [ token, info, currentColor, board ]);
 
     const onMessage = useCallback((data: WebSocketData) => {
+        console.log(data);
         if (data.type === 'STATUS_CHANGED') {
             setInfo(data.entity);
+
+            return;
+        }
+        if (data.type === 'PLAYER_MOVED') {
+            board.move(data.entity);
+            setBoard(board.copy());
+            setInfo((prevInfo) => ({ ...prevInfo, detail: data.entity.activeColor  }));
+
             return;
         }
 
-        board.move(data.entity);
-        setBoard(board.copy());
-        setInfo((prevInfo) => ({ ...prevInfo, detail: data.entity.activeColor  }));
+        if (data.type === 'DRAW_REQUEST') {
+            setOpenDrawAnswerModal(true);
+        }
     }, [ board ]);
 
     useEffect(() => {
@@ -102,7 +122,18 @@ export const useGame = (token?: string): UseGame => {
         }
     }, [ navigate, token ]);
 
-    console.log(JSON.stringify(info));
-
-    return { board, selectedCell: selectedCellRef.current, info, currentColor, onInvite, onClick, onGiveUp };
+    return {
+        board,
+        selectedCell: selectedCellRef.current,
+        info,
+        currentColor,
+        onInvite,
+        onClick,
+        onGiveUp,
+        isOpenDrawModal,
+        onOpenDrawModal,
+        onCloseDrawModal,
+        isOpenDrawAnswerModal,
+        onCloseDrawAnswerModal
+    };
 };

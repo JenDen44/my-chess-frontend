@@ -1,8 +1,8 @@
 import WhiteQueen from '../../assets/svg/white-queen.svg';
 import BlackQueen from '../../assets/svg/black-queen.svg';
-import { Figure } from './Figure';
 import { type Cell } from '../Cell';
 import { Color } from '../Color';
+import { Figure } from './Figure';
 import { FigureName } from './FigureName';
 
 export class Queen extends Figure {
@@ -16,7 +16,6 @@ export class Queen extends Figure {
         if (!super.checkCorrectMove(cell)) {
             return false;
         }
-
 
         return this.cell.checkHorizontal(cell) || this.cell.checkVertical(cell) || this.cell.checkDiagonal(cell);
     };

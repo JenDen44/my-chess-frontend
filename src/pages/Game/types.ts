@@ -8,4 +8,9 @@ export interface UseGame {
     onInvite: VoidFunction;
     onGiveUp: VoidFunction;
     onClick: (cell: Cell) => void;
+    isOpenDrawModal: boolean;
+    onOpenDrawModal: VoidFunction;
+    onCloseDrawModal: VoidFunction;
+    isOpenDrawAnswerModal: boolean;
+    onCloseDrawAnswerModal: VoidFunction;
 }

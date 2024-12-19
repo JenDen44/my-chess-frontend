@@ -1,27 +1,36 @@
 import { type FC } from 'react';
-import { Board as BoardComponent, Button, Info } from '../../components';
 import { useParams } from 'react-router';
+import Button from '@mui/material/Button';
+import { Board as BoardComponent, DrawAnswerModal, DrawModal, Info } from '../../components';
 import { useGame } from './hook';
-import { Actions, Container, Content } from './styles';
+import { Actions, Container, Content, GameField } from './styles';
 
 export const GamePage: FC = () => {
     const { token } = useParams();
-    const { board, selectedCell, info, currentColor, onInvite, onClick, onGiveUp } = useGame(token);
+    const {
+        board, selectedCell, info, currentColor, onInvite, onClick, onGiveUp, isOpenDrawModal, onOpenDrawModal,
+        onCloseDrawModal, isOpenDrawAnswerModal, onCloseDrawAnswerModal
+    } = useGame(token);
 
     return (
         <Container>
-            <Content>
-                <Info {...info} currentColor={currentColor} />
-                <BoardComponent
-                    board={board}
-                    selectedCell={selectedCell}
-                    onClick={ onClick }
-                />
+            <GameField>
+                <Content>
+                    <Info {...info} currentColor={currentColor} />
+                    <BoardComponent
+                        board={board}
+                        selectedCell={selectedCell}
+                        onClick={ onClick }
+                    />
+                </Content>
                 <Actions>
-                    <Button onClick={onGiveUp}>Сдаться</Button>
-                    <Button onClick={onInvite}>Пригласить друга</Button>
+                    <Button variant="contained" onClick={onInvite}>Пригласить друга</Button>
+                    <Button variant="contained" onClick={onOpenDrawModal}>Предложить ничью</Button>
+                    <Button variant="contained" onClick={onGiveUp}>Сдаться</Button>
                 </Actions>
-            </Content>
+            </GameField>
+            <DrawModal token={token} isOpen={isOpenDrawModal} onClose={onCloseDrawModal} />
+            <DrawAnswerModal token={token} isOpen={isOpenDrawAnswerModal} onClose={onCloseDrawAnswerModal} />
         </Container>
     );
 };

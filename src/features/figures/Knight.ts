@@ -1,8 +1,8 @@
 import WhiteKnight from '../../assets/svg/white-knight.svg';
 import BlackKnight from '../../assets/svg/black-knight.svg';
-import { Figure } from './Figure';
 import { type Cell } from '../Cell';
 import { Color } from '../Color';
+import { Figure } from './Figure';
 import { FigureName } from './FigureName';
 
 export class Knight extends Figure {
