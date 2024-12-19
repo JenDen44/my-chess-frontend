@@ -27,3 +27,19 @@ export const giveUp = (token: string): Promise<GameInfo> => {
 
     return client.post<GameInfo>('/api/game/give-up', undefined, { headers }).then((res) => res.data);
 };
+
+export const draw = (token: string): Promise<void> => {
+    const headers = {
+        Authorization: `Bearer ${ token }`
+    };
+
+    return client.post<void>('/api/game/draw', undefined, { headers }).then();
+};
+
+export const drawAnswer = (token: string, isDraw: boolean): Promise<void> => {
+    const headers = {
+        Authorization: `Bearer ${ token }`
+    };
+
+    return client.post<void>(`/api/game/draw/${isDraw}`, undefined, { headers }).then();
+};
