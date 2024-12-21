@@ -12,6 +12,11 @@ export type WebSocketData = {
 } | {
     type: 'STATUS_CHANGED';
     entity: GameInfo;
+} | {
+    type: 'DRAW_REQUEST';
+} | {
+    type: 'DRAW_RESPONSE';
+    entity: boolean;
 }
 
 export type WebsocketSubscriber = (event: WebSocketData) => void;

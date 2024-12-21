@@ -17,7 +17,6 @@ export class Bishop extends Figure {
             return false;
         }
 
-
         return this.cell.checkDiagonal(cell);
     };
 }

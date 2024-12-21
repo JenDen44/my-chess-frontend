@@ -1,8 +1,8 @@
 import WhiteKing from '../../assets/svg/white-king.svg';
 import BlackKing from '../../assets/svg/black-king.svg';
-import { Figure } from './Figure';
 import { type Cell } from '../Cell';
 import { Color } from '../Color';
+import { Figure } from './Figure';
 import { FigureName } from './FigureName';
 
 export class King extends Figure {
