@@ -13,4 +13,6 @@ export interface UseGame {
     onCloseDrawModal: VoidFunction;
     isOpenDrawAnswerModal: boolean;
     onCloseDrawAnswerModal: VoidFunction;
+    date: Date;
+    isShowTimer: boolean;
 }

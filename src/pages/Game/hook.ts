@@ -10,11 +10,13 @@ export const useGame = (token?: string): UseGame => {
     const [ info, setInfo ] = useState<GameInfo>({ status: 'in_process' });
     const [ otherToken, setOtherToken ] = useState('');
     const [ currentColor, setCurrentColor ] = useState<Color>(Color.white);
+    const [ date, setDate ] = useState(new Date());
     const selectedCellRef = useRef<Nullable<Cell>>(null);
     const navigate = useNavigate();
     const { onSubscribe, onUnsubscribe } = useWebsocket(token);
     const [ isOpenDrawModal, setOpenDrawModal ] = useState(false);
     const [ isOpenDrawAnswerModal, setOpenDrawAnswerModal ] = useState(false);
+    const isShowTimer = info.status === 'in_process' && currentColor === info.detail;
 
     const onGiveUp = useCallback(() => {
         if (!token || info.status === 'finished') return;
@@ -73,7 +75,6 @@ export const useGame = (token?: string): UseGame => {
     }, [ token, info, currentColor, board ]);
 
     const onMessage = useCallback((data: WebSocketData) => {
-        console.log(data);
         if (data.type === 'STATUS_CHANGED') {
             setInfo(data.entity);
 
@@ -83,6 +84,7 @@ export const useGame = (token?: string): UseGame => {
             board.move(data.entity);
             setBoard(board.copy());
             setInfo((prevInfo) => ({ ...prevInfo, detail: data.entity.activeColor  }));
+            setDate(new Date(data.entity.date));
 
             return;
         }
@@ -101,10 +103,11 @@ export const useGame = (token?: string): UseGame => {
     useEffect(() => {
         if (token) {
             getGame(token).then((game) => {
-                const { tokenForBlackPlayer, tokenForWhitePlayer, board, active, currentColor, info } = game;
+                const { tokenForBlackPlayer, tokenForWhitePlayer, board, active, currentColor, info, date } = game;
                 const stateBoard = new Board();
                 stateBoard.init();
                 stateBoard.addFigures(board);
+                setDate(new Date(date));
 
                 setBoard(stateBoard);
 
@@ -134,6 +137,8 @@ export const useGame = (token?: string): UseGame => {
         onOpenDrawModal,
         onCloseDrawModal,
         isOpenDrawAnswerModal,
-        onCloseDrawAnswerModal
+        onCloseDrawAnswerModal,
+        date,
+        isShowTimer
     };
 };
