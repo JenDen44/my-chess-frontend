@@ -8,6 +8,7 @@ export type WebSocketData = {
         toX: number;
         toY: number;
         activeColor: Color;
+        date: string;
     }
 } | {
     type: 'STATUS_CHANGED';

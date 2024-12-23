@@ -9,4 +9,5 @@ export interface Game {
     board: Nullable<ShortFigureName>[][];
     active: Color;
     currentColor: Color;
+    date: string;
 }
