@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { useParams } from 'react-router';
 import Button from '@mui/material/Button';
-import { Board as BoardComponent, DrawAnswerModal, DrawModal, Info, Timer } from '../../components';
+import { Board as BoardComponent, Chat, DrawAnswerModal, DrawModal, Info, Timer } from '../../components';
 import { useGame } from './hook';
 import { Actions, Container, Content, GameField } from './styles';
 
@@ -25,11 +25,16 @@ export const GamePage: FC = () => {
                 </Content>
                 <Actions>
                     <Button variant="contained" onClick={onInvite}>Пригласить друга</Button>
-                    <Button variant="contained" onClick={onOpenDrawModal}>Предложить ничью</Button>
-                    <Button variant="contained" onClick={onGiveUp}>Сдаться</Button>
+                    {info.status === 'in_process' && (
+                        <>
+                            <Button variant="contained" onClick={onOpenDrawModal}>Предложить ничью</Button>
+                            <Button variant="contained" onClick={onGiveUp}>Сдаться</Button>
+                        </>
+                    )}
                     {isShowTimer && (
                         <Timer date={date} duration={180} />
                     )}
+                    <Chat token={token}/>
                 </Actions>
             </GameField>
             <DrawModal token={token} isOpen={isOpenDrawModal} onClose={onCloseDrawModal} />
